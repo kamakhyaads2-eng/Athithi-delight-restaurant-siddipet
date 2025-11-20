@@ -432,20 +432,14 @@
         .next { right: 5px; }
 
     </style>
-    <!-- Icons Library (FontAwesome) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
     <header>
         <div class="logo-container">
-            <!-- 
-                IMPORTANT: If you have your logo file, name it 'logo.png' and put it in the same folder.
-                The line below tries to load it, and falls back to text if not found.
-            -->
             <img src="logo.png" alt="Athithi Delight Logo" class="logo-img" onerror="this.style.display='none'; document.querySelector('.logo-text').style.display='block';">
             
-            <!-- Fallback Text Logo styled with your colors -->
             <div class="logo-text" style="display: none;">
                 <span class="blue">Athithi</span> <span class="green">Delight</span>
             </div>
@@ -455,14 +449,12 @@
 
     <div class="container">
         
-   <!-- About Section (Moved under Carousel) -->
-        <div class="about-section">
+    <div class="about-section">
             <h2>Welcome to Athithi Delight</h2>
             <p>Experience the true taste of tradition! We serve authentic multi-cuisine dishes. Beyond food, we offer premium hospitality services for all your needs.</p>
         </div>
 
 
-        <!-- Image Carousel (Moved to Top) -->
         <div class="carousel-container">
             <div class="carousel-track" id="carouselTrack">
                 <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80" alt="Biryani">
@@ -470,12 +462,11 @@
                 <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80" alt="Restaurant Ambience">
                 <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=800&q=80" alt="Sweets">
             </div>
-            <button class="carousel-btn prev" onclick="moveSlide(-1)">&#10094;</button>
-            <button class="carousel-btn next" onclick="moveSlide(1)">&#10095;</button>
+            <button class="carousel-btn prev" onclick="moveSlide(-1)">❮</button>
+            <button class="carousel-btn next" onclick="moveSlide(1)">❯</button>
         </div>
 
-     
-        <!-- Services Section (Added Dining) -->
+      
         <div class="services-grid">
             <div class="service-card">
                 <div class="service-icon"><i class="fa-solid fa-bowl-food"></i></div>
@@ -500,40 +491,32 @@
         </div>
 
         <div class="links-section">
-            <!-- Call Button -->
             <a href="tel:+919876543210" class="btn btn-call">
                 <i class="fa-solid fa-phone"></i> Book now
             </a>
 
-            <!-- Location Button -->
             <a href="https://maps.app.goo.gl/J2FKTNoh3YbXe2oy8" target="_blank" class="btn btn-map">
                 <i class="fa-solid fa-location-dot"></i> View on Map
             </a>
 
-            <!-- Review Button -->
             <a href="https://www.google.com/search?sca_esv=bf9612d46e1c4c29&sxsrf=AE3TifOdLQ7lXsB34PFquTwBkwGlkxLEOw:1763633056588&si=AMgyJEtREmoPL4P1I5IDCfuA8gybfVI2d5Uj7QMwYCZHKDZ-EydZac0RF-7j2DGKCaYto0ehraExrTMbonAMTI4-MgHZ-fISoZwb4aA8kUdmywu94J6ExKdOmEyWvHvTGkriV4JI3lvKUIERJ9TTLW7UwXRNPdZl8G1HkhSjhZ9-OFVICgg5rT4%3D&q=Atithi+Delight+Multi+Cuisine+Restyughaurant+Reviews&sa=X&ved=2ahUKEwj6ruiOvYCRAxWYTGwGHU0EKqEQ0bkNegQIOhAD&biw=1352&bih=692&dpr=2" target="_blank" class="btn btn-google">
                 <i class="fa-brands fa-google"></i> Leave a Review
             </a>
 
-            <!-- Instagram Button -->
             <a href="https://www.instagram.com/athithi_delight_restaurant/" target="_blank" class="btn btn-insta">
                 <i class="fa-brands fa-instagram"></i> Follow on Instagram
             </a>
 
-            <!-- WhatsApp Button (Update number below) -->
-            <!-- Use format: https://wa.me/919999999999 -->
             <a href="https://wa.me/" target="_blank" class="btn btn-whatsapp">
                 <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
             </a>
 
-            <!-- YouTube Button (Update link later) -->
             <a href="https://www.youtube.com" target="_blank" class="btn btn-youtube">
                 <i class="fa-brands fa-youtube"></i> Watch our Videos
             </a>
         </div>
     </div>
 
-    <!-- Chatbot Widget -->
     <button class="chat-widget-btn" onclick="toggleChat()">
         <i class="fa-solid fa-comments"></i>
     </button>
@@ -541,7 +524,7 @@
     <div class="chat-window" id="chatWindow">
         <div class="chat-header">
             <h3><i class="fa-solid fa-robot"></i> Athithi Assistant</h3>
-            <button class="close-chat" onclick="toggleChat()">&times;</button>
+            <button class="close-chat" onclick="toggleChat()">×</button>
         </div>
         <div class="chat-body" id="chatBody">
             <div class="message bot-msg">
@@ -569,10 +552,16 @@
         const slides = track.getElementsByTagName('img');
         const totalSlides = slides.length;
 
-        // Auto slide every 3 seconds
-        setInterval(() => moveSlide(1), 3000);
-
+        // Start auto slide on load, but clear it when user manually interacts
+        let autoSlide = setInterval(() => moveSlide(1), 3000);
+        
         function moveSlide(n) {
+            // Clear auto slide on manual click to prevent fighting
+            if (n !== 0) {
+                clearInterval(autoSlide);
+                autoSlide = setInterval(() => moveSlide(1), 3000);
+            }
+
             slideIndex += n;
             
             if (slideIndex >= totalSlides) {
@@ -582,8 +571,13 @@
                 slideIndex = totalSlides - 1;
             }
 
-            track.style.transform = translateX(-${slideIndex * 100}%);
+            // --- CORRECTED LINE BELOW ---
+            track.style.transform = `translateX(-${slideIndex * 100}%)`;
+            // --- END OF CORRECTION ---
         }
+        
+        // Start the carousel immediately
+        moveSlide(0);
 
         // --- Chatbot Logic ---
 
@@ -628,7 +622,8 @@
         function addMessage(text, className) {
             const chatBody = document.getElementById('chatBody');
             const msgDiv = document.createElement('div');
-            msgDiv.className = message ${className};
+            // Use backticks for template literals in addMessage as well for clean string concatenation
+            msgDiv.className = `message ${className}`; 
             msgDiv.innerHTML = text;
             chatBody.appendChild(msgDiv);
             
